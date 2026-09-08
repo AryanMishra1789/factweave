@@ -103,7 +103,7 @@ Demo video: https://drive.google.com/drive/folders/1S1CIjFzm_3YzcKy0OYeSpBSZOuWo
 
 ## AI tools used
 
-GitHub Copilot was used for implementation, debugging, and documentation. The core extraction and relationship rules are implemented in the repository and can run without an external model.
+I used ChatGPT and GitHub Copilot during development for brainstorming, code review, documentation, and debugging. I made the architecture and technology decisions, implemented the main pipeline, worked through the failure cases, and ran the tests and evaluation myself. The repository contains the actual implementation; the runtime does not depend on these development tools.
 
 ## Project links
 
