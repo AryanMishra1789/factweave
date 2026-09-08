@@ -104,7 +104,3 @@ Demo video: https://drive.google.com/drive/folders/1S1CIjFzm_3YzcKy0OYeSpBSZOuWo
 ## AI tools used
 
 I used ChatGPT and GitHub Copilot during development for brainstorming, code review, documentation, and debugging. I made the architecture and technology decisions, implemented the main pipeline, worked through the failure cases, and ran the tests and evaluation myself. The repository contains the actual implementation; the runtime does not depend on these development tools.
-
-## Project links
-
-- Repository: https://github.com/AryanMishra1789/factweave
