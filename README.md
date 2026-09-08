@@ -81,17 +81,7 @@ Run the behavioral check with:
 python scripts/evaluate.py
 ```
 
-## Limitations
-
-The local extractor is conservative and works best on text-based PDF prose. Complex tables, scanned pages, and difficult semantic claims may be skipped. OCR, layout-aware table extraction, and a larger labeled evaluation set would be the next improvements.
-
-The relationship engine is an understandable prototype. Larger deployments would need background processing, migrations, object storage, indexed candidate retrieval, and stronger entity resolution.
-
 ## Project links
 
 - Repository: https://github.com/AryanMishra1789/factweave
 - Demo video: to be added
-
-## Assignment context
-
-Built for the Superjoin VIT 2026 Engineering Intern assignment. The starter documents are included under `starter-datasets/`.
