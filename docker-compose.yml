@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: factweave
+      POSTGRES_USER: factweave
+      POSTGRES_PASSWORD: factweave
+    volumes:
+      - factweave_pg:/var/lib/postgresql/data
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://factweave:factweave@db:5432/factweave
+    depends_on:
+      - db
+volumes:
+  factweave_pg:

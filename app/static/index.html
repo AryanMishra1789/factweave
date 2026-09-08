@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Factweave | Evidence workbench</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar"><div class="brand"><span class="mark">F</span><span>FACTWEAVE</span></div><span class="topnote">evidence-first knowledge layer</span><span class="status"><i></i> local workspace</span></header>
+  <main>
+    <section class="hero"><div><p class="eyebrow">PDF → FACTS → CONTEXT</p><h1>Make every claim<br><em>answerable.</em></h1><p class="lede">Extract grounded facts from messy reports, then see where sources agree, disagree, or simply describe different slices of reality.</p></div><div class="hero-stat"><strong id="factCount">0</strong><span>facts in the layer</span></div></section>
+    <section class="workbench">
+      <aside class="sidebar">
+        <div class="upload-zone" id="dropzone"><div class="upload-icon">↑</div><strong>Drop a PDF here</strong><span>or choose a file to process</span><input id="fileInput" type="file" accept="application/pdf"></div>
+        <div class="sidebar-section"><div class="section-label">LAYER</div><div class="metric"><span>Documents</span><strong id="documentCount">0</strong></div><div class="metric"><span>Evidence links</span><strong id="evidenceCount">0</strong></div></div>
+        <div class="sidebar-section"><div class="section-label">RELATIONSHIPS</div><button class="filter active" data-filter="all"><span class="dot all"></span>All findings <b id="allCount">0</b></button><button class="filter" data-filter="corroborates"><span class="dot green"></span>Corroborated <b id="corroboratesCount">0</b></button><button class="filter" data-filter="contradicts"><span class="dot red"></span>Contradictions <b id="contradictsCount">0</b></button><button class="filter" data-filter="contextualizes"><span class="dot amber"></span>Contextual differences <b id="contextualizesCount">0</b></button></div>
+        <div class="sidebar-footer">Baseline extractor · page-grounded<br>Optional LLM adapter ready</div>
+      </aside>
+      <section class="content"><div class="content-head"><div><p class="eyebrow">KNOWLEDGE REVIEW</p><h2>Findings across your documents</h2></div><button class="refresh" id="refresh">↻ Refresh</button></div><form class="search" id="searchForm"><input id="searchInput" placeholder="Search facts and source evidence" aria-label="Search facts and source evidence"><button type="submit">Search</button></form><div id="searchResults" class="search-results"></div><div id="empty" class="empty"><div class="empty-glyph">⌁</div><h3>Your evidence layer is waiting</h3><p>Upload the starter PDFs or any report to surface claims and their source passages.</p></div><div id="findings" class="findings"></div><div class="facts-head"><p class="eyebrow">EXTRACTED CLAIMS</p><h2>Facts with provenance</h2></div><div id="facts" class="facts"></div></section>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+[project]
+name = "factweave"
+version = "0.1.0"
+description = "An evidence-first fact knowledge layer for PDFs"
+requires-python = ">=3.11"
+dependencies = [
+  "Flask>=3.0.0",
+  "gunicorn>=23.0.0",
+  "python-multipart>=0.0.9",
+  "pymupdf>=1.24.0",
+  "pydantic>=2.9.0",
+  "SQLAlchemy>=2.0.0",
+  "psycopg[binary]>=3.2.0"
+]
+
+[project.optional-dependencies]
+llm = ["openai>=1.50.0"]
+agent = ["mcp>=1.0.0"]
+dev = ["pytest>=8.3.0", "ruff>=0.6.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]

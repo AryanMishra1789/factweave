@@ -1,0 +1,5 @@
+.git
+.factweave
+__pycache__
+.pytest_cache
+starter-datasets
