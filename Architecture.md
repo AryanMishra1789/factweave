@@ -488,7 +488,7 @@ The evaluation uses small explicit fixtures so a change to the reasoning rules h
 | Deployment database | PostgreSQL | Durable and extensible; requires a database service |
 | Retrieval | Lexical BM25-style ranking | Transparent and free; weaker semantic recall than embeddings |
 | Fact extraction | Conservative rules with optional LLM | Reproducible fallback; lower local semantic coverage |
-| Graph storage | Relational graph projection | Simple operations; less natural than a graph database for deep traversal |
+| Graph storage | Neo4j graph database | Direct traversal and relationship modeling; requires a second persistence service |
 | Processing | Synchronous upload pipeline | Easy to understand; large PDFs should move to background jobs |
 | Evidence | Page and quote references | Auditable; table and OCR evidence need richer layout metadata |
 | Verification | Allowlisted HTTPS fetch | Safer than arbitrary requests; cannot verify unknown domains |

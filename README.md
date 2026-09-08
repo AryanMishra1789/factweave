@@ -68,6 +68,12 @@ An optional stdio MCP adapter is available in `app/mcp_server.py`.
 
 For the system structure, see [Architecture.md](Architecture.md). For the technology choices and trade-offs, see [DECISIONS.md](DECISIONS.md).
 
+## Approach and trade-offs
+
+The pipeline separates retrieval from reasoning. PDF text is chunked and retrieved, facts are extracted with evidence, and a resolution layer compares values, units, periods, and scope. Neo4j stores the document-to-evidence-to-fact graph, while PostgreSQL stores structured application records.
+
+The detailed technology decisions are documented in [DECISIONS.md](DECISIONS.md). The main trade-offs are using lexical retrieval for transparent local execution, an LLM-assisted extraction path with a deterministic fallback, and separate PostgreSQL and Neo4j stores so graph traversal does not replace the structured evidence store.
+
 ## Required cases
 
 The UI displays evidence and reasoning for relationship findings.
@@ -83,7 +89,22 @@ Run the behavioral check with:
 python scripts/evaluate.py
 ```
 
+## Limitations and next steps
+
+The local extractor works best with text-based PDF prose. Complex tables, scanned pages, and difficult semantic claims may be skipped. The current entity matching and relationship evaluation are suitable for a prototype, but need a larger labeled dataset before production use.
+
+Next steps are OCR and layout-aware table extraction, stronger entity resolution, background processing for large PDFs, database migrations, object storage, and evaluation against labeled facts from the starter documents.
+
+## Demo
+
+The demo should show a PDF upload, extracted facts with page evidence, and one example each of corroboration, contradiction, contextual difference, and extraction abstention.
+
+Demo video: to be added
+
+## AI tools used
+
+GitHub Copilot was used for implementation, debugging, and documentation. The core extraction and relationship rules are implemented in the repository and can run without an external model.
+
 ## Project links
 
 - Repository: https://github.com/AryanMishra1789/factweave
-- Demo video: to be added
