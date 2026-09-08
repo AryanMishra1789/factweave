@@ -86,4 +86,4 @@ python scripts/evaluate.py
 ## Project links
 
 - Repository: https://github.com/AryanMishra1789/factweave
-- Demo video: to be added
+- Demo video: https://drive.google.com/drive/folders/1S1CIjFzm_3YzcKy0OYeSpBSZOuWo0ajh?usp=sharing
