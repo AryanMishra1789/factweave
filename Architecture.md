@@ -212,9 +212,9 @@ Each extracted fact contains:
 
 The local extractor intentionally rejects generic sentence fragments and broad semantic patterns when they are likely to produce unsupported claims.
 
-### 6.2 Optional LLM extraction
+### 6.2 LLM-assisted extraction
 
-`app/llm.py` provides an optional OpenAI-compatible structured-output adapter.
+`app/llm.py` provides the structured semantic extraction boundary used by the system.
 
 It is enabled only when:
 
@@ -223,20 +223,20 @@ FACTWEAVE_EXTRACTION_MODE=llm
 OPENAI_API_KEY is configured
 ```
 
-The LLM receives a chunk and is instructed to return structured facts supported by that chunk. The resulting fact still stores the complete chunk as evidence with page and offset metadata.
+The LLM receives a chunk and is instructed to return structured facts supported by that chunk. The resulting fact still stores the complete chunk as evidence with page and offset metadata. This keeps semantic extraction separate from retrieval and prevents generated claims from entering the knowledge layer without provenance.
 
 If the provider fails, the adapter falls back to the local extractor. This keeps ingestion available and prevents a provider outage from destroying the evidence workflow.
 
-### Why the LLM is optional
+### Why this extraction design
 
-The assignment permits any technology but does not require a paid model. Keeping the core pipeline provider-independent makes the project:
+The system uses the LLM for language coverage and semantic normalization, while keeping a deterministic extractor as a controlled fallback. This makes the project:
 
-- free to run;
-- reproducible by a reviewer;
-- easier to debug;
-- less exposed to model availability and rate limits.
+- resilient to provider failures;
+- reproducible during local development;
+- easier to debug against clear rule-based cases;
+- able to process high-confidence numeric patterns without spending a model call.
 
-The trade-off is lower semantic recall in local mode. The correct production direction is to use the LLM for ambiguous or low-confidence candidates, not to let it replace evidence and deterministic validation.
+The LLM is responsible for semantic coverage, not for deciding truth. Evidence validation, normalization checks, and cross-document resolution remain explicit application logic.
 
 ## 7. Evidence and provenance
 
@@ -303,19 +303,19 @@ The graph endpoint is:
 GET /api/graph
 ```
 
-### Why PostgreSQL instead of Neo4j?
+### Why PostgreSQL is the graph system of record
 
-The project does not need a graph database to satisfy the assignment. Facts and evidence are naturally document-shaped, and the current graph is a projection used for traversal and comparison.
+The knowledge graph is a real part of the application model, not a visualization layer. It connects documents, chunks, evidence, entities, facts, and relationship edges so a finding can be traversed back to its source passages.
 
 PostgreSQL with SQLAlchemy was chosen because it:
 
 - keeps deployment simple;
 - supports durable relational data;
-- avoids adding a second database for a small prototype;
-- can later use JSONB, indexes, and pgvector;
+- stores source records and graph edges in one transactional system;
+- supports JSONB, indexes, and pgvector as the retrieval layer grows;
 - is familiar to most teams.
 
-Neo4j would make graph traversal more natural, but it would add operational complexity without solving the central extraction and evidence problem. A graph database becomes more attractive if relationship traversal becomes the primary workload.
+Neo4j is a valid alternative when deep multi-hop traversal is the dominant workload. For Factweave, evidence records, facts, and relationships are updated together during ingestion, so one PostgreSQL system keeps provenance and graph edges consistent. The choice is about keeping the graph close to the evidence it explains, not avoiding graph modeling.
 
 ## 9. Fact resolution
 
@@ -494,3 +494,18 @@ The evaluation uses small explicit fixtures so a change to the reasoning rules h
 | Verification | Allowlisted HTTPS fetch | Safer than arbitrary requests; cannot verify unknown domains |
 | MCP | Optional adapter outside core | Keeps the core independent; requires separate MCP installation |
 
+## 18. Known limitations
+
+The current system is a prototype and should not be treated as an automated financial authority.
+
+Known limitations include:
+
+- scanned PDFs need OCR;
+- complex tables need layout-aware extraction;
+- local semantic extraction is conservative;
+- entity aliases are basic;
+- relationship evaluation needs a larger labeled dataset;
+- synchronous processing is not ideal for very large PDFs;
+- production use needs authentication, migrations, object storage, and observability.
+
+The design keeps these limitations visible instead of hiding them behind generated prose.

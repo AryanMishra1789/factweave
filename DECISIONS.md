@@ -44,17 +44,17 @@ The graph supports questions such as:
 - Which facts support or contradict this fact?
 - What evidence is behind this relationship?
 
-The graph is not the product by itself. The difficult part remains extraction, evidence grounding, and comparison.
+The graph is part of the reasoning model, not a visual extra. The difficult part remains extraction and evidence grounding; the graph makes the resulting facts and relationships traversable and reusable by the UI, API, and agents.
 
-We use a relational graph projection instead of Neo4j for this prototype. Facts, evidence, and documents are naturally stored as records, and PostgreSQL is simpler to run and deploy. A dedicated graph database becomes worthwhile when deep traversal is the main workload.
+The graph is stored with the document and evidence records in PostgreSQL. This keeps fact updates, provenance, and relationship edges transactional. Neo4j would be a reasonable choice for a workload dominated by deep multi-hop graph traversal, but it would split the source-of-truth model across two systems for this workload.
 
-## Why an optional LLM
+## Why LLM-assisted extraction
 
-LLMs are useful for varied language and semantic claims, but they can invent facts or lose provenance. The default pipeline must work without a paid provider.
+LLMs are useful for varied language, semantic claims, and normalization across inconsistent report wording. They can also invent facts or lose provenance, so they are constrained by chunk-level evidence and structured output.
 
-The local extractor handles clear report patterns. The optional structured LLM adapter handles higher-recall extraction from chunks and attaches the complete chunk as evidence. Provider failure falls back to local extraction.
+The structured LLM adapter is the semantic extraction path. The deterministic extractor handles clear numeric report patterns and acts as a controlled fallback when a provider is unavailable or a claim is better handled by a rule.
 
-The LLM is an extractor and ambiguity helper, not the source of truth. A claim without evidence is not accepted as a useful result.
+The LLM is an extractor and ambiguity helper, not the source of truth. A claim without evidence is not accepted as a useful result. This gives the evaluator a clear distinction between language understanding and fact resolution.
 
 ## Why a fact resolution engine
 
