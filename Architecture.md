@@ -278,7 +278,7 @@ Document -> Chunk -> Evidence -> Fact -> Entity
 
 ### Entities
 
-`app/graph.py` creates canonical entities from fact subjects. Canonicalization lowercases text, removes punctuation, and collapses whitespace. The entity id is a stable hash of the canonical name.
+`app/graph.py` creates canonical entities from fact subjects and writes them to Neo4j. Canonicalization lowercases text, removes punctuation, and collapses whitespace. The entity id is a stable hash of the canonical name.
 
 This is deliberately modest. It is enough to expose structured traversal and avoid hard-coding the starter documents, but it is not a full entity-resolution system.
 
@@ -303,19 +303,19 @@ The graph endpoint is:
 GET /api/graph
 ```
 
-### Why PostgreSQL is the graph system of record
+### Why Neo4j is the graph system of record
 
-The knowledge graph is a real part of the application model, not a visualization layer. It connects documents, chunks, evidence, entities, facts, and relationship edges so a finding can be traversed back to its source passages.
+The knowledge graph is a real part of the application model, not a visualization layer. Neo4j stores documents, chunks, evidence, entities, facts, and relationship edges so a finding can be traversed back to its source passages.
 
-PostgreSQL with SQLAlchemy was chosen because it:
+Neo4j was chosen because it:
 
-- keeps deployment simple;
-- supports durable relational data;
-- stores source records and graph edges in one transactional system;
-- supports JSONB, indexes, and pgvector as the retrieval layer grows;
-- is familiar to most teams.
+- represents fact-to-fact and fact-to-evidence relationships directly;
+- supports traversal queries for corroboration, contradiction, and provenance;
+- makes entities and aliases first-class graph nodes;
+- keeps relationship discovery separate from browser visualization;
+- provides a natural path to multi-hop agent queries.
 
-Neo4j is a valid alternative when deep multi-hop traversal is the dominant workload. For Factweave, evidence records, facts, and relationships are updated together during ingestion, so one PostgreSQL system keeps provenance and graph edges consistent. The choice is about keeping the graph close to the evidence it explains, not avoiding graph modeling.
+PostgreSQL remains the structured evidence store for document payloads, chunks, and normalized fact records. During ingestion, the application writes both stores and the graph API reads Neo4j. This split gives each database a clear responsibility: PostgreSQL stores durable application records; Neo4j handles relationship traversal.
 
 ## 9. Fact resolution
 
@@ -380,7 +380,7 @@ SQLite is the default local mode because it has zero setup and is sufficient for
 
 Set `DATABASE_URL` to a PostgreSQL SQLAlchemy URL or run `docker compose up --build`.
 
-PostgreSQL is the intended durable deployment database. A production version should replace the lightweight startup schema creation with Alembic migrations and add indexes for document ids, relation types, periods, and normalized entities.
+PostgreSQL is the durable evidence database and Neo4j is the graph database. A production version should replace the lightweight startup schema creation with Alembic migrations and add indexes for document ids, relation types, periods, and normalized entities.
 
 ## 11. API and UI
 

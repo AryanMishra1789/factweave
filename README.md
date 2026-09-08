@@ -29,11 +29,13 @@ To process the supplied PDFs:
 python scripts/seed_starter_data.py
 ```
 
-PostgreSQL is also supported:
+The full graph-backed stack uses PostgreSQL and Neo4j:
 
 ```powershell
 docker compose up --build
 ```
+
+This starts the web app on http://127.0.0.1:8000, PostgreSQL for structured records, and Neo4j Browser on http://127.0.0.1:7474. Upload processing requires Neo4j because every fact and relationship is written to the graph.
 
 ## What it does
 
@@ -58,7 +60,7 @@ $env:OPENAI_API_KEY = "your-key"
 - `GET /api/layer` returns documents, chunks, facts, entities, and relationships.
 - `GET /api/search?q=revenue` searches grounded source passages.
 - `GET /api/facts/<id>` returns a fact and its evidence.
-- `GET /api/graph` returns entities and relationships.
+- `GET /api/graph` returns the Neo4j graph snapshot.
 - `GET /api/mcp/find-contradictions` returns contradiction findings.
 - `POST /api/verify` optionally checks an allowlisted external HTTPS source.
 

@@ -4,6 +4,7 @@ from uuid import uuid4
 from flask import Flask, jsonify, request, send_from_directory
 from .config import UPLOAD_DIR
 from .config import VERIFICATION_ALLOWED_DOMAINS
+from .graph import graph_store
 from .models import Document, KnowledgeLayer
 from .pipeline import process_pdf
 from .retrieval import retrieve
@@ -83,8 +84,10 @@ def search():
 
 @app.get("/api/graph")
 def graph():
-    _, _, entities, facts, relationships = load_layer()
-    return jsonify({"entities": [entity.model_dump(mode="json") for entity in entities], "facts": [fact.model_dump(mode="json") for fact in facts], "relationships": [item.model_dump(mode="json") for item in relationships]})
+    try:
+        return jsonify(graph_store.snapshot())
+    except RuntimeError as error:
+        return jsonify(detail=str(error), graph="unavailable"), 503
 
 
 @app.get("/api/mcp/find-contradictions")

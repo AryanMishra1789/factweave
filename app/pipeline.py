@@ -1,7 +1,7 @@
 from pathlib import Path
 from .chunking import chunk_pages
 from .extractor import read_pdf
-from .graph import build_entities
+from .graph import build_entities, graph_store
 from .llm import extract_with_provider
 from .models import Document
 from .relations import compare_facts
@@ -23,4 +23,5 @@ def process_pdf(document: Document, path: Path) -> tuple[int, int]:
     save_entities(entities)
     save_facts(facts)
     save_relationships(relationships)
+    graph_store.sync(documents + [document], existing_chunks + chunks, entities, all_facts, relationships)
     return pages_count, len(facts)

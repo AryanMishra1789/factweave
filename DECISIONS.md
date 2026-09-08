@@ -46,13 +46,13 @@ The graph supports questions such as:
 
 The graph is part of the reasoning model, not a visual extra. The difficult part remains extraction and evidence grounding; the graph makes the resulting facts and relationships traversable and reusable by the UI, API, and agents.
 
-The graph is stored with the document and evidence records in PostgreSQL. This keeps fact updates, provenance, and relationship edges transactional. Neo4j would be a reasonable choice for a workload dominated by deep multi-hop graph traversal, but it would split the source-of-truth model across two systems for this workload.
+Neo4j is the graph system of record. PostgreSQL remains the structured evidence store. The ingestion pipeline writes both stores: PostgreSQL keeps document and fact payloads, while Neo4j owns graph traversal across evidence, entities, facts, and relationships.
 
 ## Why LLM-assisted extraction
 
 LLMs are useful for varied language, semantic claims, and normalization across inconsistent report wording. They can also invent facts or lose provenance, so they are constrained by chunk-level evidence and structured output.
 
-The structured LLM adapter is the semantic extraction path. The deterministic extractor handles clear numeric report patterns and acts as a controlled fallback when a provider is unavailable or a claim is better handled by a rule.
+The structured LLM adapter is the semantic extraction path. The deterministic extractor handles clear numeric report patterns and acts as a controlled fallback when a provider is unavailable or a claim is better handled by a rule. This is an implementation fallback, not the product definition: the architecture is LLM-assisted fact extraction with evidence constraints.
 
 The LLM is an extractor and ambiguity helper, not the source of truth. A claim without evidence is not accepted as a useful result. This gives the evaluator a clear distinction between language understanding and fact resolution.
 
@@ -153,7 +153,7 @@ That is an execution concern, not a reason to hide the core pipeline behind unne
 | Retrieval | BM25-style lexical search | Free, deterministic, inspectable |
 | Extraction | Conservative rules plus optional LLM | Reproducibility with higher-recall extension |
 | Relationships | Deterministic resolution first | Explainable comparisons |
-| Graph | Relational graph projection | Avoid unnecessary database infrastructure |
+| Graph | Neo4j graph database | Direct traversal and relationship modeling; requires a second persistence service |
 | Agent access | Optional MCP adapter | Reuse the same knowledge services |
 | External evidence | Allowlisted HTTPS caller | Optional enrichment with security boundaries |
 | Deployment shape | One application | Understandable prototype with clear internal boundaries |

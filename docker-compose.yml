@@ -7,13 +7,30 @@ services:
       POSTGRES_PASSWORD: factweave
     volumes:
       - factweave_pg:/var/lib/postgresql/data
+  graph:
+    image: neo4j:5-community
+    environment:
+      NEO4J_AUTH: neo4j/factweave-graph
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - factweave_neo4j:/data
+      - factweave_neo4j_logs:/logs
   web:
     build: .
     ports:
       - "8000:8000"
     environment:
       DATABASE_URL: postgresql+psycopg://factweave:factweave@db:5432/factweave
+      NEO4J_URI: bolt://graph:7687
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: factweave-graph
+      NEO4J_DATABASE: neo4j
     depends_on:
       - db
+      - graph
 volumes:
   factweave_pg:
+  factweave_neo4j:
+  factweave_neo4j_logs:
