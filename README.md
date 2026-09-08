@@ -64,6 +64,8 @@ $env:OPENAI_API_KEY = "your-key"
 
 An optional stdio MCP adapter is available in `app/mcp_server.py`.
 
+For the system structure, see [Architecture.md](Architecture.md). For the technology choices and trade-offs, see [DECISIONS.md](DECISIONS.md).
+
 ## Required cases
 
 The UI displays evidence and reasoning for relationship findings.
