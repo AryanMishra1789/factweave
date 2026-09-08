@@ -47,7 +47,7 @@ This starts the web app on http://127.0.0.1:8000, PostgreSQL for structured reco
 6. Classifies relationships as `corroborates`, `contradicts`, or `contextualizes`.
 7. Shows the result and source quotes in the UI.
 
-The default pipeline is local and does not require an LLM or API key. An optional OpenAI-compatible structured extraction adapter can be enabled with:
+The semantic extraction path supports an OpenAI-compatible structured extraction adapter. The deterministic extractor remains available as a local fallback for clear numeric claims and provider failures. Enable the LLM path with:
 
 ```powershell
 $env:FACTWEAVE_EXTRACTION_MODE = "llm"

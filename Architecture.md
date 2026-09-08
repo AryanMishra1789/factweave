@@ -88,7 +88,7 @@ app/
   extractor.py     PDF text extraction and local fact extraction
   chunking.py      Page-aware overlapping chunks
   retrieval.py     BM25-style local retrieval
-  llm.py           Optional OpenAI-compatible structured extraction
+  llm.py           LLM-assisted structured extraction with fallback
   graph.py         Canonical entity construction
   relations.py     Cross-document relationship reasoning
   pipeline.py      Ingestion orchestration
