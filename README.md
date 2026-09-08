@@ -99,7 +99,7 @@ Next steps are OCR and layout-aware table extraction, stronger entity resolution
 
 The demo should show a PDF upload, extracted facts with page evidence, and one example each of corroboration, contradiction, contextual difference, and extraction abstention.
 
-Demo video: to be added
+Demo video: https://drive.google.com/drive/folders/1S1CIjFzm_3YzcKy0OYeSpBSZOuWo0ajh?usp=sharing
 
 ## AI tools used
 
